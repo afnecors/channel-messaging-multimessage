@@ -14,9 +14,8 @@
   </head>
 
   <body>
-    <h1>Channel messaging demo</h1>
-    <p>Message not yet sent</p>
-
+    <h1>Document A</h1>
+    
     <form>
       <label for="message-box">Send a message</label>
       <input type="text" id="message-box" class="message-box" autofocus>
@@ -27,30 +26,16 @@
     </iframe>
   </body>
   <script>
-    var para = document.querySelector('p');
+    var iframe = document.querySelector('iframe');
+    var otherWindow = iframe.contentWindow;
 
-    var textInput = document.querySelector('.message-box');
     var button = document.querySelector('button');
-    
-    var ifr = document.querySelector('iframe');
-    var otherWindow = ifr.contentWindow;
+    var textInput = document.querySelector('.message-box');
 
-    ifr.addEventListener("load", iframeLoaded, false);
-    
-    function iframeLoaded() {
-      button.onclick = function(e) {
-        e.preventDefault();
-        
-        var channel = new MessageChannel();
-        otherWindow.postMessage(textInput.value, '*', [channel.port2]);
-
-        channel.port1.onmessage = handleMessage;
-        function handleMessage(e) {
-          para.innerHTML = e.data;
-          textInput.value = '';
-        } 
-      }
+    button.onclick = function(e) {
+      e.preventDefault();
+      otherWindow.postMessage(textInput.value, '*');
+      textInput.value = "";
     }
-
   </script>
 </html>
